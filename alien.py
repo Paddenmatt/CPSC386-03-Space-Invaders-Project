@@ -5,15 +5,22 @@ from timer import Timer
 
 
 class Alien(Sprite):
+    # alien_images = []
+    # for n in range(2):
+    #     alien_images.append(pg.image.load(f'images/alien{n}.bmp'))
+
+    # alien_images = [pg.image.load(f'images/alien{n}.bmp') for n in range(2)]
+
     alien_images0 = [pg.image.load(f'images/alien{n}.png') for n in range(2)]
     alien_images1 = [pg.image.load(f'images/alien{n}.png') for n in range(2, 4)]
     alien_images2 = [pg.image.load(f'images/alien{n}.png') for n in range(4, 6)]
     alien_images3 = [pg.image.load(f'images/alien{n}.png') for n in range(5, 6)]
 
-    # alien_types = {0: alien_images0, 1: alien_images1, 2: alien_images2, 3: alien_images3}
-    # Makes a Timer for the whole row of aliens (Each alien type)
-    alien_timers = {0: Timer(image_list=alien_images0), 1: Timer(image_list=alien_images1),
-                    2: Timer(image_list=alien_images2), 3: Timer(image_list=alien_images3)}
+    # alien_types = {0: alien_images0, 1 : alien_images1, 2: alien_images2, 3: alien_images3}
+    alien_timers = {0: Timer(image_list=alien_images0),
+                    1: Timer(image_list=alien_images1),
+                    2: Timer(image_list=alien_images2),
+                    3: Timer(image_list=alien_images3)}
 
     alien_explosion_images = [pg.image.load(f'images/explode{n}.png') for n in range(7)]
 
@@ -21,17 +28,18 @@ class Alien(Sprite):
         super().__init__()
         self.screen = screen
         self.settings = settings
-        self.image = pg.image.load('images/alien0.bmp')
+        self.image = pg.image.load('images/alien0.png')
         self.rect = self.image.get_rect()
         self.rect.y = self.rect.height
         self.x = float(self.rect.x)
+        self.type = type
 
         self.dying = self.dead = False
-        # TODO: Add timers for difference aliens
+
         # self.timer_normal = Timer(image_list=self.alien_images)
         # self.timer_normal = Timer(image_list=self.alien_types[type])
-        self.timer_normal = Alien.alien_timers[type]
 
+        self.timer_normal = Alien.alien_timers[type]
         self.timer_explosion = Timer(image_list=Alien.alien_explosion_images, is_loop=False)
         self.timer = self.timer_normal
 
@@ -61,11 +69,12 @@ class Alien(Sprite):
         rect = image.get_rect()
         rect.left, rect.top = self.rect.left, self.rect.top
         self.screen.blit(image, rect)
+        # self.screen.blit(self.image, self.rect)
 
 
 class Aliens:
     def __init__(self, game, screen, settings, lasers: Lasers, ship):
-        self.model_alien = Alien(settings=settings, screen=screen, type=0)
+        self.model_alien = Alien(settings=settings, screen=screen, type=1)
         self.game = game
         self.sb = game.scoreboard
         self.aliens = Group()
@@ -76,8 +85,8 @@ class Aliens:
         self.create_fleet()
 
     def get_number_aliens_x(self, alien_width):
-        available_space_x = self.settings.screen_width - 2 * alien_width
-        number_aliens_x = int(available_space_x / (2 * alien_width))
+        available_space_x = self.settings.screen_width - 6 * alien_width
+        number_aliens_x = int(available_space_x / (1.2 * alien_width))
         return number_aliens_x
 
     def get_number_rows(self, ship_height, alien_height):
@@ -89,16 +98,15 @@ class Aliens:
         self.aliens.empty()
         self.create_fleet()
 
-    # TODO: Use negative number or 6 for row_number to implement the alien
     def create_alien(self, alien_number, row_number):
-        if row_number > 5: raise ValueError('Row number must be less than 6')
+        # if row_number > 5: raise ValueError('row number must be less than 6')
         type = row_number // 2
-        alien = Alien(settings=self.settings, screen=self.screen, type=type)   # TODO: Add multiple aliens here
+        alien = Alien(settings=self.settings, screen=self.screen, type=type)
         alien_width = alien.rect.width
 
-        alien.x = alien_width + 2 * alien_width * alien_number
+        alien.x = alien_width + 1.4 * alien_width * alien_number
         alien.rect.x = alien.x
-        alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
+        alien.rect.y = alien.rect.height + 1.2 * alien.rect.height * row_number
         self.aliens.add(alien)
 
     def create_fleet(self):
@@ -142,7 +150,6 @@ class Aliens:
         self.check_fleet_bottom()
         self.check_collisions()
         self.check_fleet_empty()
-        # TODO: May not need this code
         for alien in self.aliens.sprites():
             if alien.dead:  # set True once the explosion animation has completed
                 alien.remove()
