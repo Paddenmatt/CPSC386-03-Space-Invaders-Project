@@ -5,10 +5,10 @@ from timer import Timer
 
 
 class Alien(Sprite):
-    alien_images0 = [pg.image.load(f'images/alien{n}.bmp') for n in range(2)]
-    alien_images1 = [pg.image.load(f'images/alien{n}.bmp') for n in range(2)]
-    alien_images2 = [pg.image.load(f'images/alien{n}.bmp') for n in range(2)]
-    alien_images3 = [pg.image.load(f'images/alien{n}.bmp') for n in range(2)]
+    alien_images0 = [pg.image.load(f'images/alien{n}.png') for n in range(2)]
+    alien_images1 = [pg.image.load(f'images/alien{n}.png') for n in range(2, 4)]
+    alien_images2 = [pg.image.load(f'images/alien{n}.png') for n in range(4, 6)]
+    alien_images3 = [pg.image.load(f'images/alien{n}.png') for n in range(5, 6)]
 
     # alien_types = {0: alien_images0, 1: alien_images1, 2: alien_images2, 3: alien_images3}
     # Makes a Timer for the whole row of aliens (Each alien type)
@@ -65,7 +65,7 @@ class Alien(Sprite):
 
 class Aliens:
     def __init__(self, game, screen, settings, lasers: Lasers, ship):
-        self.model_alien = Alien(settings=settings, screen=screen)
+        self.model_alien = Alien(settings=settings, screen=screen, type=0)
         self.game = game
         self.sb = game.scoreboard
         self.aliens = Group()
@@ -76,13 +76,13 @@ class Aliens:
         self.create_fleet()
 
     def get_number_aliens_x(self, alien_width):
-        available_space_x = self.settings.screen_width - 4 * alien_width
-        number_aliens_x = int(available_space_x / (1 * alien_width))
+        available_space_x = self.settings.screen_width - 2 * alien_width
+        number_aliens_x = int(available_space_x / (2 * alien_width))
         return number_aliens_x
 
     def get_number_rows(self, ship_height, alien_height):
         available_space_y = (self.settings.screen_height - (3 * alien_height) - ship_height)
-        number_rows = int(available_space_y / (1 * alien_height))
+        number_rows = int(available_space_y / (1.5 * alien_height))
         return number_rows
 
     def reset(self):
