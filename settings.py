@@ -22,7 +22,7 @@ class Settings():
         self.initialize_speed_settings()
 
     def initialize_speed_settings(self):
-        self.alien_speed_factor = 1
+        self.alien_speed_factor = 0.5
         self.ship_speed_factor = 3
         self.laser_speed_factor = 3
 
