@@ -26,7 +26,7 @@ def check_keyup_events(event, ship):
     # elif key in movement.keys(): ship.vel = Vector()
 
 
-def check_events(settings, ship):
+def check_events(settings, ship, play_button):
     for event in pg.event.get():
         if event.type == pg.QUIT:
             sys.exit()
@@ -34,7 +34,14 @@ def check_events(settings, ship):
             check_keydown_events(event=event, settings=settings, ship=ship)
         elif event.type == pg.KEYUP:
             check_keyup_events(event=event, ship=ship)
+        elif event.type == pg.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pg.mouse.get_pos()
+            check_play_button(settings, play_button, mouse_x, mouse_y)
 
+def check_play_button(settings, play_button, mouse_x, mouse_y):
+    """Start a new game when the player clicks Play."""
+    if play_button.rect.collidepoint(mouse_x, mouse_y):
+        settings.game_active = True
 
 def clamp(posn, rect, settings):
     left, top = posn.x, posn.y

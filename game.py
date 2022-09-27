@@ -2,6 +2,7 @@ import pygame as pg
 from settings import Settings
 import game_functions as gf
 
+from button import Button
 from laser import Lasers
 from alien import Aliens
 from ship import Ship
@@ -20,6 +21,8 @@ class Game:
 
         self.sound = Sound(bg_music="sounds/startrek.wav")
 
+
+        self.play_button = Button(self.settings, self.screen, "Play")
         self.scoreboard = Scoreboard(game=self)  
         self.lasers = Lasers(settings=self.settings)
         self.ship = Ship(game=self, screen=self.screen, settings=self.settings, sound=self.sound, lasers=self.lasers)
@@ -42,12 +45,16 @@ class Game:
     def play(self):
         self.sound.play_bg()
         while True:     # at the moment, only exits in gf.check_events if Ctrl/Cmd-Q pressed
-            gf.check_events(settings=self.settings, ship=self.ship)
-            self.screen.fill(self.settings.bg_color)
-            self.ship.update()
-            self.aliens.update()
-            self.lasers.update()
-            self.scoreboard.update()
+            if not self.settings.game_active:
+                self.play_button.draw_button()
+
+            gf.check_events(settings=self.settings, ship=self.ship, play_button=self.play_button)
+            if self.settings.game_active:
+                self.screen.fill(self.settings.bg_color)
+                self.ship.update()
+                self.aliens.update()
+                self.lasers.update()
+                self.scoreboard.update()
             pg.display.flip()
 
 

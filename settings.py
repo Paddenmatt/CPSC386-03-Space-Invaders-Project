@@ -3,10 +3,12 @@ class Settings():
 
     def __init__(self):
         """Initialize the game's settings."""
+        self.game_active = False
         # Screen settings
         self.screen_width = 1200
         self.screen_height = 800
         self.bg_color = (150, 150, 150)
+
         
         self.laser_width = 5
         self.laser_height = 30
