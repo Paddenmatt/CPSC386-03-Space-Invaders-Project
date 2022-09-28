@@ -18,9 +18,8 @@ class Sound:
         pg.mixer.music.stop()
 
     def shoot_laser(self): pg.mixer.Sound.play(self.sounds['laser'])
-
-    def gameover(self):
-        self.stop_bg()
+    def gameover(self): 
+        self.stop_bg() 
         pg.mixer.music.load('sounds/gameover.wav')
         self.play_bg()
         time.sleep(2.8)
