@@ -2,7 +2,6 @@ import pygame as pg
 from settings import Settings
 import game_functions as gf
 
-from button import Title
 from button import Title, Button, Alien_sheet
 from laser import Lasers, LaserType
 from alien import Aliens
