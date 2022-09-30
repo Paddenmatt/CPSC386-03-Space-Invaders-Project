@@ -14,18 +14,23 @@ class Lasers:
     def __init__(self, settings, type):
         self.lasers = Group()
         self.settings = settings
-        self.type=type
+        self.type = type
+
     def reset(self):
-        self.lasers.empty()        
+        self.lasers.empty()
+
     def shoot(self, game, x, y):
-        self.lasers.add(Laser(settings=game.settings, screen=game.screen, 
+        self.lasers.add(Laser(settings=game.settings, screen=game.screen,
                               x=x, y=y, sound=game.sound, type=self.type))
+
     def update(self):
         self.lasers.update()
         for laser in self.lasers.copy():
             if laser.rect.bottom <= 0: self.lasers.remove(laser)
+
     def draw(self):
         for laser in self.lasers.sprites(): laser.draw()
+
 
 class Laser(Sprite):
     """A class to manage lasers fired from the ship"""
@@ -52,10 +57,10 @@ class Laser(Sprite):
         # self.y -= self.speed_factor
         self.rect.y = self.y
         self.draw()
+
     def draw(self):
         image = self.timer.image()
         rect = image.get_rect()
         rect.left, rect.top = self.rect.left, self.rect.top
         self.screen.blit(image, rect)
         # pg.draw.rect(self.screen, self.color, self.rect)
-

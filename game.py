@@ -20,7 +20,7 @@ class Game:
         self.screen = pg.display.set_mode(size=size)
         pg.display.set_caption("Alien Invasion")
 
-        self.sound = Sound(bg_music="sounds/startrek.wav")
+        self.sound = Sound(bg_music="sounds/game_music0.wav")
         self.play_button = Button(self.settings, self.screen)
         self.title = Title(self.settings, self.screen)
         self.name = Alien_sheet(self.settings, self.screen)
