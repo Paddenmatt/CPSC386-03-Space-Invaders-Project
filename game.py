@@ -68,12 +68,11 @@ class Game:
 
     def speed_up(self):
         self.soundSpeed += 1
-        print(f"Sound sped up {self.soundSpeed}")
+        print(f"Sound sped set to {self.soundSpeed}")
         pg.mixer.music.stop()
         pg.mixer.music.load(f'sounds/game_music{self.soundSpeed}.wav')
         pg.mixer.music.set_volume(0.7)
         pg.mixer.music.play(-1, 0.0)
-        print("Speed Increased by 1.1x")
 
 
 

@@ -97,9 +97,11 @@ class Aliens:
         return number_rows
 
     def reset(self):
+        global aliens_killed
         self.aliens.empty()
         self.create_fleet()
         self.aliens_lasers.reset()
+        aliens_killed = 0
 
     def create_alien(self, alien_number, row_number):
         type = row_number // 2
