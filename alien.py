@@ -6,6 +6,8 @@ from pygame.sprite import Sprite, Group
 from laser import Lasers
 from timer import Timer
 
+aliens_killed = 0
+
 
 class Alien(Sprite):
     alien_images0 = [pg.transform.rotozoom(pg.image.load(f'images/alien__0{n}.png'), 0, 0.7) for n in range(2)]
@@ -19,6 +21,7 @@ class Alien(Sprite):
 
     alien_explosion_images = [pg.image.load(f'images/explode{n}.png') for n in range(7)]
 
+
     def __init__(self, game, type):
         super().__init__()
         self.screen = game.screen
@@ -28,9 +31,8 @@ class Alien(Sprite):
         self.rect.y = self.rect.height
         self.x = float(self.rect.x)
         self.type = type
-
+        self.game = game
         self.dying = self.dead = False
-
         self.timer_normal = Alien.alien_timers[type]
         self.timer_explosion = Timer(image_list=Alien.alien_explosion_images, is_loop=False)
         self.timer = self.timer_normal
@@ -49,8 +51,12 @@ class Alien(Sprite):
             self.timer = self.timer_explosion
 
     def update(self):
+        global aliens_killed
         if self.timer == self.timer_explosion and self.timer.is_expired():
             self.kill()
+            aliens_killed += 1
+            if aliens_killed % 14 == 0:
+                self.game.speed_up()
         settings = self.settings
         self.x += (settings.alien_speed_factor * settings.fleet_direction)
         self.rect.x = self.x
@@ -61,7 +67,6 @@ class Alien(Sprite):
         rect = image.get_rect()
         rect.left, rect.top = self.rect.left, self.rect.top
         self.screen.blit(image, rect)
-        # self.screen.blit(self.image, self.rect) 
 
 
 class Aliens:

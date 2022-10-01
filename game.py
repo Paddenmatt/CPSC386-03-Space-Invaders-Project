@@ -13,13 +13,14 @@ import sys
 
 
 class Game:
+    soundSpeed = 0
+
     def __init__(self):
         pg.init()
         self.settings = Settings()
         size = self.settings.screen_width, self.settings.screen_height   # tuple
         self.screen = pg.display.set_mode(size=size)
         pg.display.set_caption("Alien Invasion")
-
         self.sound = Sound(bg_music="sounds/game_music0.wav")
         self.play_button = Button(self.settings, self.screen)
         self.title = Title(self.settings, self.screen)
@@ -36,11 +37,11 @@ class Game:
 
     def reset(self):
         print('Resetting game...')
-        # self.lasers.reset()
         self.barriers.reset()
         self.ship.reset()
         self.aliens.reset()
-        # self.scoreboard.reset()
+        self.soundSpeed = -1
+        self.speed_up()
 
     def game_over(self):
         print('All ships gone: game over!')
@@ -64,6 +65,16 @@ class Game:
                 self.barriers.update()
                 self.scoreboard.update()
             pg.display.flip()
+
+    def speed_up(self):
+        self.soundSpeed += 1
+        print(f"Sound sped up {self.soundSpeed}")
+        pg.mixer.music.stop()
+        pg.mixer.music.load(f'sounds/game_music{self.soundSpeed}.wav')
+        pg.mixer.music.set_volume(0.7)
+        pg.mixer.music.play(-1, 0.0)
+        print("Speed Increased by 1.1x")
+
 
 
 def main():
