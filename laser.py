@@ -34,8 +34,8 @@ class Lasers:
 
 class Laser(Sprite):
     """A class to manage lasers fired from the ship"""
-    alien_laser_images = [pg.transform.rotozoom(pg.image.load(f'images/alienlaser{n}.png'), 0, 1) for n in range(2)]
-    ship_laser_images = [pg.transform.rotozoom(pg.image.load(f'images/laser_{n}.png'), 0, 1) for n in range(2)]
+    alien_laser_images = [pg.transform.rotozoom(pg.image.load(f'images/alienlaser-{n}.png'), 0, 1) for n in range(2)]
+    ship_laser_images = [pg.transform.rotozoom(pg.image.load(f'images/laser-{n}.png'), 0, 1) for n in range(2)]
     laser_images = {LaserType.ALIEN: alien_laser_images, LaserType.SHIP: ship_laser_images}
 
     def __init__(self, settings, screen, x, y, sound, type):
@@ -54,7 +54,6 @@ class Laser(Sprite):
 
     def update(self):
         self.y += self.speed_factor if self.type == LaserType.ALIEN else -self.speed_factor
-        # self.y -= self.speed_factor
         self.rect.y = self.y
         self.draw()
 
@@ -63,4 +62,3 @@ class Laser(Sprite):
         rect = image.get_rect()
         rect.left, rect.top = self.rect.left, self.rect.top
         self.screen.blit(image, rect)
-        # pg.draw.rect(self.screen, self.color, self.rect)

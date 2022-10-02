@@ -20,10 +20,8 @@ class Ship(Sprite):
         self.posn = self.center_ship()  # posn is the centerx, bottom of the rect, not left, top
         self.vel = Vector()
 
-        # self.lasers = Lasers(settings=self.settings)
         self.lasers = game.ship_lasers
 
-        # self.lasers = lasers
         self.shooting = False
         self.lasers_attempted = 0
 
@@ -39,9 +37,6 @@ class Ship(Sprite):
         self.rect.left, self.rect.top = self.posn.x, self.posn.y
 
     def die(self):
-        # # TODO: reduce the ships_left,
-        # #       reset the game if ships > 0
-        # #       game_over if the ships == 0
         self.ships_left -= 1
         print(f'Ship is dead! Only {self.ships_left} ships left')
         self.game.reset() if self.ships_left > 0 else self.game.game_over()
