@@ -32,6 +32,7 @@ class Alien(Sprite):
         self.x = float(self.rect.x)
         self.type = type
         self.game = game
+        self.sb = game.scoreboard
         self.dying = self.dead = False
         self.timer_normal = Alien.alien_timers[type]
         self.timer_explosion = Timer(image_list=Alien.alien_explosion_images, is_loop=False)
@@ -49,6 +50,9 @@ class Alien(Sprite):
         if not self.dying:
             self.dying = True
             self.timer = self.timer_explosion
+            self.sb.increment_score()
+            self.sb.check_high_score()
+            #self.sb.prep_level()
 
     def update(self):
         global aliens_killed
