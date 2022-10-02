@@ -3,7 +3,10 @@ from email.headerregistry import HeaderRegistry
 from random import randint, choice
 import pygame as pg
 import pygame.sprite
+
 from pygame.sprite import Sprite, Group
+
+import button
 from laser import Lasers
 from timer import Timer
 import settings
@@ -36,6 +39,7 @@ class Alien(Sprite):
         self.timer_normal = Alien.alien_timers[type]
         self.timer_explosion = Timer(image_list=Alien.alien_explosion_images, is_loop=False)
         self.timer = self.timer_normal
+        self.sb = game.scoreboard
 
     def check_edges(self):
         screen_rect = self.screen.get_rect()
@@ -196,7 +200,7 @@ class Aliens:
     def ufo_timer(self):
         self.ufo_spawn_time -= 1
         if self.ufo_spawn_time <= 0:
-            self.ufo.add(UFO(choice(['right', 'left']), self.settings.screen_width))
+            self.ufo.add(UFO(choice(['right', 'left']), self.game))
             self.ufo_spawn_time = randint(1000, 1600)
 
 
@@ -205,15 +209,18 @@ class UFO(pg.sprite.Sprite):
     alien_explosion_images = [pg.image.load(f'images/explode{n}.png') for n in range(7)]
     ufo_images = [pg.transform.rotozoom(pg.image.load(f'images/alien__0{n}.png'), 0, 0.7) for n in range(6, 7)]
 
-    def __init__(self, side, screen_width):
+    def __init__(self, side, game):
         super().__init__()
+        self.settings = game.settings
+        self.screen = game.screen
+
         self.dying = self.dead = False
         self.timer = Timer(image_list=UFO.ufo_images, is_loop=False)
         self.timer_explosion = Timer(image_list=UFO.alien_explosion_images, is_loop=False)
 
         self.image = pg.image.load('images/alien__06.png').convert_alpha()
         if side == 'right':
-            x = screen_width + 50
+            x = self.settings.screen_width + 50
             self.speed = -3
         else:
             x = -50
@@ -223,10 +230,19 @@ class UFO(pg.sprite.Sprite):
 
     def update(self):
         self.rect.x += self.speed
+
         if self.timer == self.timer_explosion:
+            score = randint(100, 200)
+            # self.display_score(score)
             self.kill()
 
     def hit(self):
         if not self.dying:
             self.dying = True
             self.timer = self.timer_explosion
+
+    # def display_score(self, score):
+        # font = pygame.font.Font('arial.ttf', 32)
+        # text = font.render(f'{score}', True, (255, 255, 255))
+        # textRext = text.get_rect()
+        # self.screen.blit(text, textRext)
