@@ -6,7 +6,9 @@ class Scoreboard:
         self.score = 0
         self.level = 0
         self.high_score = 0
-        
+        f = open('high_score.txt', 'r')
+        data = f.readline()
+        self.highscore = data
         self.settings = game.settings
         self.screen = game.screen
         self.screen_rect = self.screen.get_rect()
@@ -21,6 +23,7 @@ class Scoreboard:
     def increment_score(self): 
         self.score += self.settings.alien_points
         self.prep_score()
+        self.prep_high_score()
 
     def prep_score(self): 
         score_str = str(self.score)
@@ -41,3 +44,26 @@ class Scoreboard:
 
     def draw(self): 
         self.screen.blit(self.score_image, self.score_rect)
+
+    def check_high_score(self):
+        if self.score > self.high_score:
+            self.high_score = self.score
+            self.prep_high_score()
+            filename = 'high_score.txt'
+            with open(filename, 'w') as file_object:
+                file_object.write(str(self.high_score))
+    def store_hih_score(self):
+        filename = 'high_score.txt'
+        with open(filename, 'r') as file_object:
+            file_object.read(int(self.high_score))
+
+    def prep_high_score(self):
+        high_score = int(round(self.high_score, -1))
+        high_score_str = "{:,}".format(high_score)
+        self.high_score_image = self.font.render(high_score_str, True, self.text_color, self.settings.bg_color)
+
+        self.high_score_rect = self.high_score_image.get_rect()
+        self.high_score_rect.centerx = self.screen_rect.centerx
+        self.high_score_rect.top = self.score_rect.top
+
+

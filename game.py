@@ -1,7 +1,7 @@
 import pygame as pg
 from settings import Settings
 import game_functions as gf
-
+from button import HighScores
 from button import Title, Button, Alien_sheet
 from laser import Lasers, LaserType
 from alien import Aliens
@@ -29,7 +29,7 @@ class Game:
 
         self.ship_lasers = Lasers(settings=self.settings, type=LaserType.SHIP)
         self.alien_lasers = Lasers(settings=self.settings, type=LaserType.ALIEN)
-        
+        self.hs = HighScores(self.settings, self.screen, f'HighScore = {self.scoreboard.highscore}')
         self.barriers = Barriers(game=self)
         self.ship = Ship(game=self)
         self.aliens = Aliens(game=self)
@@ -56,7 +56,7 @@ class Game:
                 self.play_button.draw_button()
                 self.name.draw_button()
                 self.title.draw_button()
-
+                self.hs.draw_button()
             gf.check_events(settings=self.settings, ship=self.ship, play_button=self.play_button)
             if self.settings.game_active:
                 self.screen.fill(self.settings.bg_color)
