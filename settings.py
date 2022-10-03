@@ -15,7 +15,6 @@ class Settings():
         self.lasers_every = 35           # change to 1 to see faster lasers
 
         self.aliens_shoot_every = 120    # about every 2 seconds at 60 fps
-        self.alien_points = 50
 
         self.ship_limit = 3         # total ships allowed in game before game over
 

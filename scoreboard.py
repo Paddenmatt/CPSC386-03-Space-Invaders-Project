@@ -24,8 +24,8 @@ class Scoreboard:
         self.prep_score()
         self.prep_high_score()
 
-    def increment_score(self):
-        self.score += self.settings.alien_points
+    def increment_score(self, score_inc):
+        self.score += score_inc
         self.prep_score()
 
     def prep_score(self):

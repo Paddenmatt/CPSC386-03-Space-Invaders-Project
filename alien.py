@@ -1,15 +1,7 @@
-from ast import Or
-from email.headerregistry import HeaderRegistry
 from random import randint, choice
 import pygame as pg
-import pygame.sprite
-
 from pygame.sprite import Sprite, Group
-
-import button
-from laser import Lasers
 from timer import Timer
-import settings
 
 aliens_killed = 0
 
@@ -22,6 +14,8 @@ class Alien(Sprite):
     alien_timers = {0: Timer(image_list=alien_images0),
                     1: Timer(image_list=alien_images1),
                     2: Timer(image_list=alien_images2)}
+
+    alien_scores = {0: 10, 1: 20, 2: 40}
 
     alien_explosion_images = [pg.image.load(f'images/explode{n}.png') for n in range(7)]
 
@@ -40,6 +34,7 @@ class Alien(Sprite):
         self.timer_explosion = Timer(image_list=Alien.alien_explosion_images, is_loop=False)
         self.timer = self.timer_normal
         self.sb = game.scoreboard
+        self.score = Alien.alien_scores[type]
 
     def check_edges(self):
         screen_rect = self.screen.get_rect()
@@ -98,7 +93,6 @@ class Aliens:
 
     def get_number_rows(self, ship_height, alien_height):
         available_space_y = (self.settings.screen_height - (3 * alien_height) - ship_height)
-        number_rows = int(available_space_y / (1 * alien_height))
         number_rows = 6
         return number_rows
 
@@ -166,13 +160,17 @@ class Aliens:
         if collisions:
             for alien in collisions:
                 alien.hit()
-            self.sb.increment_score()
+                self.sb.increment_score(alien.score)
 
         collisions = pg.sprite.groupcollide(self.ufo, self.ship_lasers, False, True)
         if collisions:
             for ufo in collisions:
                 ufo.hit()
             self.sb.increment_score()
+
+        collisions = pg.sprite.spritecollide(self.ship, self.aliens_lasers.lasers, False)
+        if collisions:
+            self.ship.die()
 
         collisions = pg.sprite.groupcollide(self.aliens_lasers.lasers, self.ship_lasers, True, True)
         if collisions:
@@ -205,7 +203,6 @@ class Aliens:
 
 
 class UFO(pg.sprite.Sprite):
-
     alien_explosion_images = [pg.image.load(f'images/explode{n}.png') for n in range(7)]
     ufo_images = [pg.transform.rotozoom(pg.image.load(f'images/alien__0{n}.png'), 0, 0.7) for n in range(6, 7)]
 
@@ -242,7 +239,7 @@ class UFO(pg.sprite.Sprite):
             self.timer = self.timer_explosion
 
     # def display_score(self, score):
-        # font = pygame.font.Font('arial.ttf', 32)
-        # text = font.render(f'{score}', True, (255, 255, 255))
-        # textRext = text.get_rect()
-        # self.screen.blit(text, textRext)
+    # font = pygame.font.Font('arial.ttf', 32)
+    # text = font.render(f'{score}', True, (255, 255, 255))
+    # textRext = text.get_rect()
+    # self.screen.blit(text, textRext)
