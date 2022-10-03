@@ -129,7 +129,7 @@ class Aliens:
     def check_fleet_bottom(self):
         for alien in self.aliens.sprites():
             if alien.check_bottom_or_ship(self.ship):
-                self.ship.die()
+                self.ship.hit()
                 break
 
     def check_fleet_empty(self):
@@ -166,11 +166,11 @@ class Aliens:
         if collisions:
             for ufo in collisions:
                 ufo.hit()
-            self.sb.increment_score()
+            self.sb.increment_score(randint(100, 200))
 
-        collisions = pg.sprite.spritecollide(self.ship, self.aliens_lasers.lasers, False)
+        collisions = pg.sprite.spritecollide(self.ship, self.aliens_lasers.lasers, True)
         if collisions:
-            self.ship.die()
+            self.ship.hit()
 
         collisions = pg.sprite.groupcollide(self.aliens_lasers.lasers, self.ship_lasers, True, True)
         if collisions:
@@ -183,7 +183,6 @@ class Aliens:
         self.check_fleet_empty()
         self.shoot_from_random_alien()
         self.ufo_timer()
-        self.ufo.draw(self.screen)
         self.ufo.update()
         for alien in self.aliens.sprites():
             if alien.dead:  # set True once the explosion animation has completed
@@ -203,17 +202,20 @@ class Aliens:
 
 
 class UFO(pg.sprite.Sprite):
-    alien_explosion_images = [pg.image.load(f'images/explode{n}.png') for n in range(7)]
-    ufo_images = [pg.transform.rotozoom(pg.image.load(f'images/alien__0{n}.png'), 0, 0.7) for n in range(6, 7)]
+    ufo_images = [pg.transform.rotozoom(pg.image.load(f'images/alien__06.png'), 0, 1.0)]
+    ufo_explosion_images = [pg.transform.rotozoom(pg.image.load(f'images/explode{n}.png'), 0, 1.0) for n in
+                            range(6)]
 
     def __init__(self, side, game):
         super().__init__()
         self.settings = game.settings
         self.screen = game.screen
 
+        self.timer_normal = Timer(image_list=UFO.ufo_images)
+        self.timer_explosion = Timer(image_list=UFO.ufo_explosion_images, delay=200, is_loop=False)
+        self.timer = self.timer_normal
+
         self.dying = self.dead = False
-        self.timer = Timer(image_list=UFO.ufo_images, is_loop=False)
-        self.timer_explosion = Timer(image_list=UFO.alien_explosion_images, is_loop=False)
 
         self.image = pg.image.load('images/alien__06.png').convert_alpha()
         if side == 'right':
@@ -228,15 +230,20 @@ class UFO(pg.sprite.Sprite):
     def update(self):
         self.rect.x += self.speed
 
-        if self.timer == self.timer_explosion:
-            score = randint(100, 200)
-            # self.display_score(score)
+        if self.timer == self.timer_explosion and self.timer.is_expired():
             self.kill()
+        self.draw()
 
     def hit(self):
         if not self.dying:
             self.dying = True
             self.timer = self.timer_explosion
+
+    def draw(self):
+        image = self.timer.image()
+        rect = image.get_rect()
+        rect.left, rect.top = self.rect.left, self.rect.top
+        self.screen.blit(image, rect)
 
     # def display_score(self, score):
     # font = pygame.font.Font('arial.ttf', 32)

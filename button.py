@@ -50,7 +50,7 @@ class Alien_sheet():
         self.screen_rect = screen.get_rect()
         self.image = pg.image.load("images/alien_scores.jpg")
         self.rect = self.image.get_rect()
-        self.rect.center = (600, 300)
+        self.rect.center = (600, 350)
         self.prep_msg()
 
     def prep_msg(self):
