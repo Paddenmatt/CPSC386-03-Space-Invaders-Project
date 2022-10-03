@@ -8,16 +8,20 @@ aliens_killed = 0
 
 
 class Alien(Sprite):
+    # Alien type image lists
     alien_images0 = [pg.transform.rotozoom(pg.image.load(f'images/alien__0{n}.png'), 0, 0.7) for n in range(2)]
     alien_images1 = [pg.transform.rotozoom(pg.image.load(f'images/alien__1{n}.png'), 0, 0.7) for n in range(2)]
     alien_images2 = [pg.transform.rotozoom(pg.image.load(f'images/alien__2{n}.png'), 0, 0.7) for n in range(2)]
 
+    # Alien image timer dictionary
     alien_timers = {0: Timer(image_list=alien_images0),
                     1: Timer(image_list=alien_images1),
                     2: Timer(image_list=alien_images2)}
 
+    # Alien type points
     alien_scores = {0: 10, 1: 20, 2: 40}
 
+    # Alien explosion image list
     alien_explosion_images = [pg.image.load(f'images/alienexplode{n}.png') for n in range(7)]
 
     def __init__(self, game, type):
@@ -75,7 +79,7 @@ class Aliens:
         self.game = game
         self.sb = game.scoreboard
         self.aliens = Group()
-        self.ship_lasers = game.ship_lasers.lasers  # a laser Group
+        self.ship_lasers = game.ship_lasers.lasers
         self.aliens_lasers = game.alien_lasers
         self.screen = game.screen
         self.settings = game.settings
@@ -158,22 +162,26 @@ class Aliens:
             i += 1
 
     def check_collisions(self):
+        # Alien and Ship Laser collision
         collisions = pg.sprite.groupcollide(self.aliens, self.ship_lasers, False, True)
         if collisions:
             for alien in collisions:
                 alien.hit()
                 self.sb.increment_score(alien.score)
 
+        # UFO and Ship Laser collision
         collisions = pg.sprite.groupcollide(self.ufo, self.ship_lasers, False, True)
         if collisions:
             for ufo in collisions:
                 ufo.hit()
             self.sb.increment_score(randint(100, 200))
 
+        # Ship and Alien Laser collision
         collisions = pg.sprite.spritecollide(self.ship, self.aliens_lasers.lasers, True)
         if collisions:
             self.ship.hit()
 
+        # Alien Laser and Ship Laser collision
         collisions = pg.sprite.groupcollide(self.aliens_lasers.lasers, self.ship_lasers, True, True)
         if collisions:
             print("ship_lasers hitting an aliens_lasers")
@@ -198,6 +206,7 @@ class Aliens:
 
     def ufo_timer(self):
         self.ufo_spawn_time -= 1
+        # Will randomly spawn the UFO from the left or right of the screen
         if self.ufo_spawn_time <= 0:
             self.ufo.add(UFO(choice(['right', 'left']), self.game))
             self.sound.ufo()
@@ -205,7 +214,11 @@ class Aliens:
 
 
 class UFO(pg.sprite.Sprite):
+
+    # UFO image list
     ufo_images = [pg.transform.rotozoom(pg.image.load(f'images/alien__06.png'), 0, 1.0)]
+
+    # UFO explosion image list
     ufo_explosion_images = [pg.transform.rotozoom(pg.image.load(f'images/alienexplode{n}.png'), 0, 1.0) for n in
                             range(6)]
 
@@ -213,13 +226,10 @@ class UFO(pg.sprite.Sprite):
         super().__init__()
         self.settings = game.settings
         self.screen = game.screen
-
         self.timer_normal = Timer(image_list=UFO.ufo_images)
         self.timer_explosion = Timer(image_list=UFO.ufo_explosion_images, delay=200, is_loop=False)
         self.timer = self.timer_normal
-
         self.dying = self.dead = False
-
         self.image = pg.image.load('images/alien__06.png').convert_alpha()
         if side == 'right':
             x = self.settings.screen_width + 50
@@ -247,9 +257,3 @@ class UFO(pg.sprite.Sprite):
         rect = image.get_rect()
         rect.left, rect.top = self.rect.left, self.rect.top
         self.screen.blit(image, rect)
-
-    # def display_score(self, score):
-    # font = pygame.font.Font('arial.ttf', 32)
-    # text = font.render(f'{score}', True, (255, 255, 255))
-    # textRext = text.get_rect()
-    # self.screen.blit(text, textRext)

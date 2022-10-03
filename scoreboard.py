@@ -7,18 +7,14 @@ class Scoreboard:
     def __init__(self, game):
         self.score = 0
         self.level = 0
-
         f = open('high_score.txt', 'r')
         data = f.readline()
         self.high_score = int(data)
-
         self.settings = game.settings
         self.screen = game.screen
         self.screen_rect = self.screen.get_rect()
-
         self.text_color = (30, 30, 30)
         self.font = pg.font.SysFont(None, 48)
-
         self.score_image = None
         self.score_rect = None
         self.prep_score()

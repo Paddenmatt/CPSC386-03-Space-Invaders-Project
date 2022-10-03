@@ -8,6 +8,7 @@ from timer import Timer
 
 
 class Ship(Sprite):
+    # Collection of Ship and Explosion image lists
     ship_images = [pg.transform.rotozoom(pg.image.load(f'images/ship.png'), 0, 1.0)]
     ship_explosion_images = [pg.transform.rotozoom(pg.image.load(f'images/explode{n}.png'), 0, 1.0) for n in
                              range(6)]
@@ -24,18 +25,12 @@ class Ship(Sprite):
         self.screen_rect = game.screen.get_rect()
         self.posn = self.center_ship()  # posn is the centerx, bottom of the rect, not left, top
         self.vel = Vector()
-
-        # self.lasers = Lasers(settings=self.settings)
         self.lasers = game.ship_lasers
-
-        # self.lasers = lasers
         self.shooting = False
         self.lasers_attempted = 0
-
         self.timer_normal = Timer(image_list=Ship.ship_images)
         self.timer_explosion = Timer(image_list=Ship.ship_explosion_images, delay=200, is_loop=False)
         self.timer = self.timer_normal
-
         self.dying = self.dead = False
 
     def center_ship(self):
@@ -81,4 +76,3 @@ class Ship(Sprite):
         rect = image.get_rect()
         rect.left, rect.top = self.rect.left, self.rect.top
         self.screen.blit(image, rect)
-        # self.screen.blit(self.image, self.rect)

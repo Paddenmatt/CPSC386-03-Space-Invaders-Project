@@ -34,6 +34,7 @@ class Lasers:
 
 class Laser(Sprite):
     """A class to manage lasers fired from the ship"""
+    # Collection of Laser images
     alien_laser_images = [pg.transform.rotozoom(pg.image.load(f'images/alienlaser-{n}.png'), 0, 1) for n in range(2)]
     ship_laser_images = [pg.transform.rotozoom(pg.image.load(f'images/laser-{n}.png'), 0, 1) for n in range(2)]
     laser_images = {LaserType.ALIEN: alien_laser_images, LaserType.SHIP: ship_laser_images}
