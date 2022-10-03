@@ -77,7 +77,7 @@ class Game:
         self.soundSpeed = -1
         self.speed_up()
         self.blocks.empty()
-        self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=self.settings.screen_width / 15, y_start=480)
+        self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=self.settings.screen_width / 15, y_start=self.settings.screen_height - 150)
 
     def game_over(self):
         print('All ships gone: game over!')
