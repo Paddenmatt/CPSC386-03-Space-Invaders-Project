@@ -18,7 +18,7 @@ class Alien(Sprite):
 
     alien_scores = {0: 10, 1: 20, 2: 40}
 
-    alien_explosion_images = [pg.image.load(f'images/explode{n}.png') for n in range(7)]
+    alien_explosion_images = [pg.image.load(f'images/alienexplode{n}.png') for n in range(7)]
 
     def __init__(self, game, type):
         super().__init__()
@@ -206,7 +206,7 @@ class Aliens:
 
 class UFO(pg.sprite.Sprite):
     ufo_images = [pg.transform.rotozoom(pg.image.load(f'images/alien__06.png'), 0, 1.0)]
-    ufo_explosion_images = [pg.transform.rotozoom(pg.image.load(f'images/explode{n}.png'), 0, 1.0) for n in
+    ufo_explosion_images = [pg.transform.rotozoom(pg.image.load(f'images/alienexplode{n}.png'), 0, 1.0) for n in
                             range(6)]
 
     def __init__(self, side, game):
