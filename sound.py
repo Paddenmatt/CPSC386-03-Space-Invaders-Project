@@ -9,7 +9,8 @@ class Sound:
         pg.mixer.music.set_volume(0.7)
         laser_sound = pg.mixer.Sound('sounds/laser2.wav')
         gameover_sound = pg.mixer.Sound('sounds/gameover.wav')
-        self.sounds = {'laser': laser_sound, 'gameover': gameover_sound}
+        ufo_sound = pg.mixer.Sound('sounds/ufo.wav')
+        self.sounds = {'laser': laser_sound, 'gameover': gameover_sound, 'ufo': ufo_sound}
 
     def play_bg(self):
         pg.mixer.music.play(-1, 0.0)
@@ -24,3 +25,6 @@ class Sound:
         pg.mixer.music.load('sounds/gameover.wav')
         self.play_bg()
         time.sleep(2.8)
+
+    def ufo(self):
+        pg.mixer.Sound.play(self.sounds['ufo'])

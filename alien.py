@@ -2,6 +2,7 @@ from random import randint, choice
 import pygame as pg
 from pygame.sprite import Sprite, Group
 from timer import Timer
+from sound import Sound
 
 aliens_killed = 0
 
@@ -69,7 +70,7 @@ class Alien(Sprite):
 
 
 class Aliens:
-    def __init__(self, game):
+    def __init__(self, game, sound):
         self.model_alien = Alien(game=game, type=1)
         self.game = game
         self.sb = game.scoreboard
@@ -81,6 +82,7 @@ class Aliens:
         self.shoot_requests = 0
         self.ship = game.ship
         self.create_fleet()
+        self.sound = sound
 
         # UFO Setup
         self.ufo = pg.sprite.GroupSingle()
@@ -198,6 +200,7 @@ class Aliens:
         self.ufo_spawn_time -= 1
         if self.ufo_spawn_time <= 0:
             self.ufo.add(UFO(choice(['right', 'left']), self.game))
+            self.sound.ufo()
             self.ufo_spawn_time = randint(1000, 1600)
 
 

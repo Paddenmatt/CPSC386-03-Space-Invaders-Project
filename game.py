@@ -32,7 +32,7 @@ class Game:
         self.hs = HighScores(self.settings, self.screen, f'HighScore = {self.scoreboard.high_score}')
         self.barriers = Barriers(game=self)
         self.ship = Ship(game=self)
-        self.aliens = Aliens(game=self)
+        self.aliens = Aliens(game=self, sound=self.sound)
         self.settings.initialize_speed_settings()
 
     def reset(self):
@@ -75,7 +75,6 @@ class Game:
         pg.mixer.music.load(f'sounds/game_music{self.soundSpeed}.wav')
         pg.mixer.music.set_volume(0.7)
         pg.mixer.music.play(-1, 0.0)
-
 
 
 def main():
