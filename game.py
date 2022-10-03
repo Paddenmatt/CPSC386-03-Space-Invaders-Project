@@ -40,7 +40,7 @@ class Game:
         self.blocks = pg.sprite.Group()
         self.obstacle_amount = 4
         self.obstacle_x_positions = [num * (self.settings.screen_width / self.obstacle_amount) for num in range(self.obstacle_amount)]
-        self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=self.settings.screen_width / 15, y_start=self.settings.screen_height - 160)
+        self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=self.settings.screen_width / 15, y_start=self.settings.screen_height - 150)
 
     def create_obstacle(self, x_start, y_start, offset_x):
         for row_index, row in enumerate(self.shape):
